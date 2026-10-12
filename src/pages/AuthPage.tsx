@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, HelpCircle, Luggage, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, HelpCircle, Luggage, MailCheck, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -64,6 +64,7 @@ export default function AuthPage() {
   const [data, setData] = useState<SignupData>(INITIAL);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [confirmSent, setConfirmSent] = useState(false);
 
   useEffect(() => {
     if (user) navigate('/dashboard', { replace: true });
@@ -145,7 +146,12 @@ export default function AuthPage() {
       createdAt: new Date().toISOString(),
     };
     try {
-      await signUp(data.email.trim(), data.password, profile);
+      const { needsConfirmation } = await signUp(data.email.trim(), data.password, profile);
+      if (needsConfirmation) {
+        setConfirmSent(true);
+        setBusy(false);
+      }
+      // Otherwise the auth-change effect redirects to the dashboard.
     } catch (err) {
       setError(friendlyError(err instanceof Error ? err.message : String(err)));
       setBusy(false);
@@ -184,6 +190,32 @@ export default function AuthPage() {
         <div className="w-full max-w-md mx-auto">
           <Logo size={30} className="text-2xl justify-center lg:hidden mb-8" />
 
+          {confirmSent ? (
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-2xl bg-brand-soft text-brand flex items-center justify-center mx-auto mb-5">
+                <MailCheck size={30} />
+              </div>
+              <h1 className="text-3xl font-black tracking-tight text-content mb-2">
+                Check your email
+              </h1>
+              <p className="text-content-soft font-medium mb-6">
+                We sent a confirmation link to{' '}
+                <span className="font-black text-content">{data.email.trim()}</span>. Click it to
+                activate your account, then log in.
+              </p>
+              <Button
+                onClick={() => {
+                  setConfirmSent(false);
+                  setMode('login');
+                  setStep(0);
+                }}
+                className="w-full py-4 text-lg"
+              >
+                Back to log in
+              </Button>
+            </div>
+          ) : (
+          <>
           <div className="flex gap-1 p-1 bg-surface-3 rounded-xl mb-8">
             {(['login', 'signup'] as const).map((m) => (
               <button
@@ -251,6 +283,8 @@ export default function AuthPage() {
               <HelpCircle size={15} /> How it works
             </button>
           </div>
+          </>
+          )}
         </div>
       </div>
     </div>

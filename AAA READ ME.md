@@ -4,295 +4,175 @@ Questo file spiega **a cosa serve ogni cartella e ogni file** del progetto, in
 italiano, pensato per te. È una mappa: quando vuoi toccare qualcosa, qui trovi
 dove si trova e cosa fa.
 
-In fondo trovi la sezione **"Come visualizzare e testare l'app dal tuo desktop"**.
+In fondo trovi **"Come testare l'app"** e **"Come pubblicare su GitHub e Vercel"**.
 
 ---
 
 ## In breve: com'è organizzato il progetto
 
-- I file **nella cartella principale** (`LL/`) sono tutti di **configurazione**:
-  dicono agli strumenti (Vite, TypeScript, Tailwind, Vercel) come comportarsi.
-- La cartella **`src/`** contiene **tutto il codice vero dell'app**.
-- La cartella **`public/`** contiene file statici (es. l'icona).
-- Le cartelle `node_modules/` e `dist/` sono generate automaticamente: non si
-  toccano a mano (vedi sotto).
+- I file **nella cartella principale** (`LL/`) sono di **configurazione** (dicono
+  a Vite, TypeScript, Tailwind, Vercel come comportarsi).
+- La cartella **`src/`** contiene **tutto il codice dell'app**.
+- La cartella **`public/`** contiene file statici (l'icona).
+- `node_modules/` e `dist/` sono generate automaticamente: non si toccano a mano.
 
 ---
 
 ## 1. File di configurazione (cartella principale `LL/`)
 
-- **`package.json`** — La "carta d'identità" del progetto. Elenca le librerie
-  usate (React, Supabase, Tailwind, ecc.) e definisce i comandi:
-  `npm run dev` (avvia in locale), `npm run build` (crea la versione per il web),
-  `npm run preview` (prova la versione buildata).
-- **`package-lock.json`** — Generato automaticamente da npm. Blocca le versioni
-  esatte di ogni libreria così l'app si installa identica su ogni computer. Non
-  si modifica a mano.
-- **`vite.config.ts`** — Configura Vite, lo strumento che avvia e costruisce
-  l'app. Qui è definita la scorciatoia `@/` che punta a `src/`.
-- **`tsconfig.json`**, **`tsconfig.app.json`**, **`tsconfig.node.json`** —
-  Configurano TypeScript (il linguaggio tipizzato su cui è scritta l'app).
-  `tsconfig.json` è il file "radice" che richiama gli altri due:
-  `tsconfig.app.json` vale per il codice dell'app, `tsconfig.node.json` per gli
-  strumenti di build.
-- **`tailwind.config.js`** — Configura Tailwind CSS (il sistema con cui sono
-  fatti gli stili grafici). Qui è registrato il colore del brand arancione.
-- **`postcss.config.js`** — Collega Tailwind al processo che genera il CSS
-  finale. È un passaggio tecnico richiesto da Tailwind.
-- **`index.html`** — La pagina HTML di partenza. È il guscio in cui React
-  "monta" tutta l'app. Contiene titolo, icona e il punto d'aggancio `<div id="root">`.
-- **`vercel.json`** — Istruzioni per Vercel (il sito dove pubblicherai l'app).
-  Dice a Vercel di reindirizzare ogni indirizzo alla pagina principale, così la
-  navigazione tra schermate funziona anche ricaricando la pagina.
-- **`.gitignore`** — Elenco di file/cartelle che Git deve **ignorare** (non
-  caricare su GitHub): le librerie installate, le chiavi segrete, ecc.
-- **`.env.example`** — Modello del file delle chiavi. Lo copi in `.env` e ci
-  metti i tuoi dati Supabase. Serve come promemoria di quali valori servono.
-- **`.env`** — (lo crei tu) Contiene le tue chiavi Supabase reali. **Non va
-  mai caricato su GitHub** (infatti è nel `.gitignore`).
-- **`supabase-schema.sql`** — Lo "stampo" del database. Lo incolli una volta
-  nel pannello Supabase per creare le tabelle `profiles` e `trips` con le regole
-  di sicurezza (ogni utente vede solo i propri dati).
-- **`START TEST.bat`** — Scorciatoia per Windows: ci fai **doppio click** e
-  avvia l'app in locale aprendola nel browser. Alla prima esecuzione installa da
-  solo le librerie. Serve per testare veloce senza scrivere comandi.
-- **`README.md`** — Guida tecnica in inglese: stack, struttura, setup Supabase e
-  deploy su Vercel. È il file che un altro sviluppatore leggerebbe.
+- **`package.json`** — Carta d'identità del progetto: librerie usate e comandi
+  (`npm run dev`, `npm run build`, `npm run preview`).
+- **`package-lock.json`** — Blocca le versioni esatte delle librerie. Generato, non si modifica a mano.
+- **`vite.config.ts`** — Configura Vite (lo strumento che avvia e costruisce l'app) e la scorciatoia `@/` verso `src/`.
+- **`tsconfig.json` / `tsconfig.app.json` / `tsconfig.node.json`** — Configurano TypeScript.
+- **`tailwind.config.js`** — Configura Tailwind CSS: colore brand, token dei colori (per il tema chiaro/scuro), ombre morbide.
+- **`postcss.config.js`** — Collega Tailwind alla generazione del CSS.
+- **`index.html`** — Pagina HTML di partenza; include uno script che applica il tema prima del disegno (niente lampo bianco).
+- **`vercel.json`** — Istruzioni per Vercel: reindirizza ogni rotta alla pagina principale, così la navigazione funziona anche al refresh.
+- **`.gitignore`** — Elenco di file/cartelle che Git ignora (librerie, chiavi, file generati).
+- **`.env.example`** — Modello del file delle chiavi; lo copi in `.env`.
+- **`.env`** — (lo crei tu) Le tue chiavi Supabase reali. **Mai su GitHub** (è ignorato).
+- **`supabase-schema.sql`** — Lo "stampo" del database: lo incolli una volta nel pannello Supabase per creare le tabelle `profiles` e `trips` con le regole di sicurezza.
+- **`START TEST.bat`** — Scorciatoia Windows: doppio click → avvia l'app in locale e la apre nel browser.
+- **`README.md`** — Guida tecnica in inglese (stack, setup Supabase, deploy).
 - **`AAA READ ME.md`** — Questo file.
 
-### Cartelle generate automaticamente (non si toccano a mano)
-
-- **`node_modules/`** — Tutte le librerie scaricate da `npm install`. Enorme e
-  rigenerabile: se la cancelli, basta rilanciare `npm install`.
-- **`dist/`** — La versione "compilata" dell'app, creata da `npm run build`. È
-  ciò che finisce online. Rigenerabile.
-- **`.git/`** — I dati interni di Git (cronologia delle versioni). Gestita dai
-  comandi git, mai a mano.
+### Cartelle generate automaticamente (non si toccano)
+- **`node_modules/`** — Librerie scaricate da `npm install`. Rigenerabile.
+- **`dist/`** — Versione compilata creata da `npm run build`. È ciò che va online.
+- **`.git/`** — Dati interni di Git (cronologia versioni).
 
 ---
 
 ## 2. `public/` — File statici
-
-- **`luggage.svg`** — L'icona a forma di valigia che appare nella scheda del
-  browser (la "favicon").
+- **`luggage.svg`** — L'icona valigia nella scheda del browser.
 
 ---
 
 ## 3. `src/` — Il codice dell'app
 
 ### File radice di `src/`
-
-- **`main.tsx`** — Il punto di partenza del codice. Avvia React e "avvolge"
-  l'app con i fornitori di contesto: il router (navigazione) e `AuthProvider`
-  (login/dati utente). È la prima cosa che gira.
-- **`App.tsx`** — Il "centralino" delle schermate. Definisce tutti gli indirizzi
-  (rotte) dell'app e associa ciascuno alla sua pagina. Carica ogni pagina solo
-  quando serve (lazy loading = app più veloce). Decide anche se mostrare la
-  schermata di setup (chiavi mancanti) o il caricamento iniziale.
-- **`types.ts`** — Le "definizioni" dei dati dell'app: com'è fatto un Profilo, un
-  Viaggio, un capo del catalogo, ecc. Serve a TypeScript per evitare errori.
-- **`index.css`** — Gli stili globali e le animazioni (es. le valigie che volano
-  sullo sfondo della landing). Qui viene attivato Tailwind.
-- **`vite-env.d.ts`** — File tecnico che insegna a TypeScript a riconoscere le
-  variabili d'ambiente (`VITE_SUPABASE_URL`, ecc.). Non contiene logica.
+- **`main.tsx`** — Punto di partenza: avvia React e avvolge l'app nei "fornitori" (router, tema, autenticazione).
+- **`App.tsx`** — Il centralino delle schermate: definisce tutte le rotte e carica ogni pagina solo quando serve (più veloce).
+- **`types.ts`** — Le definizioni dei dati (Profilo, Viaggio, capo del catalogo, essential, ecc.).
+- **`index.css`** — Stili globali, token dei colori per chiaro/scuro, animazioni, tinta scura della mappa.
+- **`vite-env.d.ts`** — File tecnico per far riconoscere a TypeScript le variabili d'ambiente.
 
 ### `src/components/` — Pezzi di interfaccia riutilizzabili
-
-- **`FullScreenLoader.tsx`** — La schermata nera con la valigia che pulsa,
-  mostrata mentre l'app carica.
-- **`MockModeBanner.tsx`** — La piccola etichetta gialla "Test mode" in alto,
-  mostrata solo quando l'app gira in modalità di test (senza Supabase), per
-  ricordarti che i dati sono salvati solo in quel browser. Si può chiudere.
+- **`FullScreenLoader.tsx`** — Schermata di caricamento con la valigia che pulsa.
+- **`MockModeBanner.tsx`** — Etichetta gialla "Test mode" quando l'app gira senza Supabase (dati solo nel browser).
+- **`AppLayout.tsx`** — Guscio delle schede principali (Home/Trips/Profile): pagina + barra di navigazione in basso.
+- **`BottomNav.tsx`** — La barra di navigazione fissa in basso (Home / Trips / Profile).
+- **`MapView.tsx`** — La mappa (Leaflet + tile gratuite OpenStreetMap, **nessuna API key**). Pin arancione, si adatta al tema.
+- **`AddressSearch.tsx`** — Ricerca indirizzi in tempo reale (OpenStreetMap) con tendina dei risultati.
+- **`LondonCarousel.tsx`** — Carosello di foto di Londra in dissolvenza (sfondo delle hero).
+- **`TripProgress.tsx`** — Nel dettaglio viaggio: countdown dinamico + barra + timeline delle tappe del guardaroba.
+- **`TripInsightCarousel.tsx`** — Nel dettaglio viaggio: carosello a rotazione con meteo di Londra (simulato), una frase, le foto di cosa hai scelto e aforismi sul viaggiatore.
+- **`CartDrawer.tsx`** — Il carrello a scomparsa nel catalogo: vedi e rimuovi i capi scelti.
+- **`ItemTag.tsx`** — Il pop-up "targhetta" di un capo/essential: immagine, attributi e (per i capi) il numero di cicli con spiegazione; bottone aggiungi/togli.
+- **`BodyFigure.tsx`** — Le figurine SVG del tipo di fisico (slim/regular/athletic/full), adattate al genere.
+- **`ProfilePickers.tsx`** — I selettori del profilo: tipo di fisico e (versione a pallini) colore.
+- **`ColorSelect.tsx`** — Il menu a tendina per il colore preferito (swatch + nome).
 
 #### `src/components/ui/` — Mattoncini grafici di base
+- **`Button.tsx`** — Il pulsante standard con le varianti di colore.
+- **`Input.tsx`** — Il campo di testo con etichetta.
+- **`Field.tsx`** — Campo con icona a sinistra (usato per date/orari).
+- **`Card.tsx`** — Il riquadro bianco/scuro con ombra morbida.
+- **`Logo.tsx`** — Il logo "LuggageLess".
+- **`StepHeader.tsx`** — La barra in alto con la freccia indietro (nel flusso di prenotazione).
+- **`SegmentedControl.tsx`** — Il selettore a pastiglie (es. Hotel/Airbnb/Office).
+- **`CountdownTimer.tsx`** — Il conto alla rovescia compatto nelle card dei viaggi.
 
-- **`Button.tsx`** — Il pulsante standard, con le varianti di colore (arancione,
-  nero, bordato, ecc.). Usato ovunque.
-- **`Input.tsx`** — Il campo di testo standard con etichetta.
-- **`Card.tsx`** — Il "riquadro" bianco con angoli arrotondati e ombra, usato per
-  raggruppare contenuti.
-- **`Logo.tsx`** — Il logo "LuggageLess" con l'icona valigia.
-- **`StepHeader.tsx`** — La barra in alto con la freccia "indietro", usata in
-  tutte le schermate della prenotazione.
-- **`CountdownTimer.tsx`** — Il conto alla rovescia ("3g 5h") che mostra quanto
-  manca alla consegna del guardaroba.
+### `src/context/` — Lo stato condiviso
+- **`AuthContext.tsx`** — Cuore di login e dati: utente, profilo, viaggi, e le azioni (registrati, accedi, esci, salva profilo, crea/aggiorna/elimina viaggio). Gestisce anche la verifica email (salva il profilo al primo accesso dopo la conferma).
+- **`ThemeContext.tsx`** — Il tema Light/Dark/System, salvato tra le sessioni.
+- **`TripDraftContext.tsx`** — La "bozza" del viaggio in corso di prenotazione (destinazione, date, carrello, articoli da spedire, extra) e il riuso del guardaroba da un viaggio passato.
 
-### `src/context/` — Lo "stato condiviso" dell'app
+### `src/data/`
+- **`catalog.ts`** — Catalogo capi (con taglia, colore, tessuto, brand, cicli, generati in modo deterministico) ed essentials divisi in categorie (Wellness, Hygiene, Electronics, Wear).
 
-Sono due contenitori di dati accessibili da più schermate senza doverli passare
-a mano ogni volta.
+### `src/hooks/`
+- **`useLocationSearch.ts`** — La ricerca indirizzi (OpenStreetMap), con attesa prima di cercare.
+- **`useMediaQuery.ts`** — Rileva la larghezza dello schermo (desktop vs mobile) per adattare il layout dal vivo.
 
-- **`AuthContext.tsx`** — Il cuore di login e dati. Tiene chi è l'utente
-  collegato, il suo profilo e i suoi viaggi, e offre le azioni: registrati,
-  accedi, esci, salva profilo, aggiungi viaggio. Parla con Supabase.
-- **`TripDraftContext.tsx`** — La "bozza" del viaggio in corso di prenotazione:
-  destinazione, date, carrello dei capi, articoli da spedire, extra. Viene
-  condivisa tra i vari passi della prenotazione e azzerata alla fine.
+### `src/lib/` — Dati e logica
+- **`backend.ts`** — Lo smistatore: usa Supabase se ci sono le chiavi, altrimenti il backend finto di test. L'app non deve sapere quale dei due è attivo.
+- **`supabase.ts`** — Collegamento a Supabase e rilevamento delle chiavi mancanti.
+- **`db.ts`** — Operazioni sul database Supabase (leggi/salva profilo, leggi/crea/aggiorna/elimina viaggi).
+- **`mockBackend.ts`** — Il **database finto per il test** (nel browser). Non è il database ufficiale e non va mai online.
+- **`tripStatus.ts`** — Calcola a che tappa è il guardaroba in base alle date del viaggio (per la timeline del tracking).
 
-### `src/data/` — Dati di base dell'app
+### `src/routes/`
+- **`ProtectedRoute.tsx`** — Il "buttafuori": se non sei loggato ti manda al login.
 
-- **`catalog.ts`** — Il catalogo dei capi e degli accessori "essentials". I capi
-  sono generati in modo **deterministico** (prezzi e stili sempre uguali a ogni
-  caricamento, non più casuali). Contiene anche le categorie, gli stili e la
-  tariffa di storage.
+### `src/pages/` — Le schermate (una per file)
+- **`LandingPage.tsx`** — La pagina pubblica iniziale (hero con foto di Londra + "Start your journey").
+- **`AuthPage.tsx`** — Login (un passaggio) e **registrazione a step** (Account → About you → Fit & style). Mostra "Check your email" quando serve la verifica. Link "How it works" sempre presente.
+- **`DashboardPage.tsx`** — La home dopo il login: saluto + hero "Plan a trip" con foto di Londra + riquadri dati.
+- **`TripsListPage.tsx`** — L'elenco viaggi (con empty-state che invita a prenotare) e i pulsanti View / Edit / Delete.
+- **`TripDetailPage.tsx`** — Il **tracking** del viaggio: mappa, countdown + timeline tappe, guardaroba selezionato, carosello insight, e azioni Edit/Delete.
+- **`TripEditPage.tsx`** — Modifica di date/orari/tipo alloggio ed extra di un viaggio.
+- **`ProfilePage.tsx`** — Profilo (dati personali, indirizzo, colore preferito), Sizes (taglie + figurina fisico) e Settings (tema, lingua, "How it works", logout).
+- **`HowItWorksPage.tsx`** — Pagina che spiega le due modalità (Rent from catalog / Let us manage your clothes).
 
-### `src/hooks/` — Funzioni riutilizzabili con logica
-
-- **`useLocationSearch.ts`** — La ricerca indirizzi in tempo reale su mappa
-  (OpenStreetMap), limitata a Londra. Aspetta che smetti di digitare prima di
-  cercare, per non fare richieste inutili.
-
-### `src/lib/` — Collegamento ai dati (Supabase e modalità test)
-
-- **`backend.ts`** — Lo "smistatore": è l'unico punto da cui l'app chiede login e
-  dati. Se trova le chiavi Supabase usa il database vero; se non ci sono, usa il
-  backend finto di test. Il resto dell'app non deve sapere quale dei due è attivo.
-- **`supabase.ts`** — Crea il collegamento a Supabase usando le tue chiavi.
-  Capisce anche se le chiavi mancano (per attivare la modalità test).
-- **`db.ts`** — Le operazioni sul database Supabase in un posto solo: leggi/salva
-  profilo, leggi/crea viaggi.
-- **`mockBackend.ts`** — Il **database finto per il test**, salvato nel browser
-  (localStorage). Replica login, profilo e viaggi senza bisogno di Supabase, così
-  puoi provare tutta l'app a configurazione zero. **Non è il database ufficiale**
-  e non viene mai usato online: serve solo per testare in fretta sul tuo PC.
-
-### `src/routes/` — Protezione delle pagine
-
-- **`ProtectedRoute.tsx`** — Il "buttafuori": se non sei loggato ti manda al
-  login; se sei loggato ma non hai ancora impostato le taglie ti manda
-  all'onboarding. Protegge dashboard, profilo, viaggi e prenotazione.
-
-### `src/pages/` — Le schermate dell'app (una per file)
-
-- **`LandingPage.tsx`** — La prima pagina pubblica (sfondo nero, "Travel light.
-  Zero luggage.", pulsante per iniziare e sezione "come funziona").
-- **`AuthPage.tsx`** — Login e registrazione con email e password, con
-  messaggi d'errore chiari.
-- **`OnboardingPage.tsx`** — La configurazione iniziale: nome, genere, standard
-  taglie scarpe e taglie (camicia, pantaloni, scarpe).
-- **`DashboardPage.tsx`** — La home dopo il login: saluto, pulsante grande
-  "Plan a Trip" e scorciatoie a viaggi e profilo.
-- **`TripsListPage.tsx`** — L'elenco dei viaggi prenotati, ciascuno con mappa,
-  conto alla rovescia e, per i noleggi, l'opzione "compra il capo".
-- **`ProfilePage.tsx`** — Il profilo utente con due schede: "Le mie taglie" e
-  "Impostazioni" (account, tema, lingua, logout).
-
-#### `src/pages/trip/` — I passi della prenotazione (in ordine)
-
-- **`WherePage.tsx`** — Passo 1: dove e quando (ricerca indirizzo su mappa,
-  tipo di alloggio, date e orari di check-in/out).
-- **`ServicePage.tsx`** — Passo 2: scegli il servizio, "Noleggia dal catalogo"
-  oppure "Spedisci i tuoi vestiti".
-- **`RentPage.tsx`** — Passo 3a: il catalogo da cui scegliere i capi da
-  noleggiare, con filtri per categoria e stile e carrello.
-- **`ShipPage.tsx`** — Passo 3b: inserisci i capi che vuoi spedire (foto,
-  taglia, colore, materiale, marca).
-- **`ExtrasPage.tsx`** — Passo 4: aggiungi gli accessori da viaggio (spazzolino,
-  cavi, ecc.).
-- **`CheckoutPage.tsx`** — Passo 5: riepilogo del viaggio, pagamento (per ora
-  simulato) e salvataggio del viaggio sul database.
+#### `src/pages/trip/` — I passi della prenotazione
+- **`WherePage.tsx`** — Dove e quando (mappa + ricerca indirizzo + date). Link "How it works" nell'header.
+- **`ServicePage.tsx`** — Scegli il servizio (Rent / Ship) e, se hai viaggi passati, "Reuse a previous wardrobe".
+- **`RentPage.tsx`** — Il catalogo da noleggiare, con targhetta per capo e carrello.
+- **`ShipPage.tsx`** — Inserisci i capi da spedire + indirizzo di ritiro (salvato nel profilo).
+- **`ExtrasPage.tsx`** — Gli essentials divisi in categorie, con targhetta.
+- **`CheckoutPage.tsx`** — Riepilogo + pagamento (simulato) e salvataggio del viaggio.
 
 ---
 
-## Come visualizzare e testare l'app dal tuo desktop
+## Come testare l'app (modo più veloce)
 
-### Il modo più veloce: doppio click su `START TEST.bat`
-
-Per provare l'app **senza alcuna configurazione**, fai **doppio click** sul file
-`START TEST.bat` nella cartella `LL`. La prima volta installa le librerie (ci
-mette un minuto), poi avvia l'app e la apre nel browser su
-**http://localhost:5173/**. Tieni aperta la finestra nera mentre provi; per
+Doppio click su **`START TEST.bat`**: la prima volta installa le librerie, poi
+avvia l'app e la apre su **http://localhost:5173/**. Tieni aperta la finestra; per
 fermare, chiudila o premi `Ctrl + C`.
 
-In questa modalità l'app funziona in **"Test mode"** (vedi l'etichetta gialla in
-alto): login, onboarding, prenotazioni e viaggi funzionano davvero, ma i dati
-sono salvati **solo nel browser del tuo PC** tramite un database finto. È
-perfetta per testare in fretta e per sviluppare le schermate. Non serve Supabase.
-
-> Quando aggiungi le chiavi Supabase (passo sotto), l'app passa in automatico al
-> database vero, condiviso tra dispositivi. La "Test mode" sparisce da sola.
-
-### Passo 0 — Collega Supabase (opzionale, solo per il database vero, ~5 minuti)
-
-Serve solo quando vuoi dati reali e condivisi (es. per la versione online). Per
-il test veloce **puoi saltarlo**.
-
-1. Vai su **supabase.com**, crea un account e un progetto gratuito.
-2. Nel pannello del progetto apri **SQL Editor → New query**, apri il file
-   `supabase-schema.sql` di questo progetto, copia tutto il contenuto, incollalo
-   e premi **Run**. Questo crea le tabelle del database.
-3. Vai su **Authentication → Providers → Email** e **disattiva "Confirm email"**
-   (così chi si registra entra subito, senza email di conferma). Salva.
-4. Vai su **Project Settings → API** e copia due valori:
-   - **Project URL**
-   - la chiave **anon public**
-
-5. Nella cartella `LL`, crea il file delle chiavi. Apri PowerShell nella
-   cartella del progetto e lancia:
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-   Poi apri il file `.env` (con Kiro o Blocco note) e incolla i tuoi valori:
-   ```
-   VITE_SUPABASE_URL=https://il-tuo-progetto.supabase.co
-   VITE_SUPABASE_ANON_KEY=la-tua-chiave-anon
-   ```
-
-### Modo A — Vederla in locale sul tuo PC (consigliato per sviluppare)
-
-1. Apri PowerShell nella cartella del progetto. Da Kiro puoi aprire il terminale
-   integrato; altrimenti, in Esplora file apri la cartella `LL`, scrivi
-   `powershell` nella barra dell'indirizzo e premi Invio.
-2. Solo la prima volta, installa le librerie:
-   ```powershell
-   npm install
-   ```
-3. Avvia l'app:
-   ```powershell
-   npm run dev
-   ```
-4. Nel terminale comparirà un indirizzo tipo **http://localhost:5173/**.
-   Tienilo premendo **Ctrl** e cliccaci sopra, oppure copialo nel browser.
-5. L'app si ricarica da sola a ogni modifica che salvi. Per fermarla, nel
-   terminale premi **Ctrl + C**.
-
-> Nota: "localhost" significa che gira solo sul tuo computer. Va benissimo per
-> provarla e svilupparla; non è visibile da altri finché non la pubblichi.
-
-### Modo B — Provare la versione "di produzione" in locale
-
-Serve a controllare che la versione ottimizzata (quella che andrà online)
-funzioni:
+Senza chiavi Supabase l'app gira in **"Test mode"** (etichetta gialla in alto):
+tutto funziona, ma i dati stanno solo nel tuo browser (database finto). Perfetto
+per sviluppare. In alternativa, da terminale nella cartella `LL`:
 ```powershell
-npm run build
-npm run preview
+npm install   # solo la prima volta
+npm run dev
 ```
-`preview` ti dà un indirizzo locale (tipo http://localhost:4173/) con l'app già
-compilata.
 
-### Modo C — Pubblicarla online su Vercel (per vederla da ovunque)
+---
 
-1. Carica la cartella `LL` su un repository GitHub.
-2. Su **vercel.com** fai **Add New → Project** e importa il repository.
-3. Vercel riconosce da solo che è un progetto Vite (comando build `npm run build`,
-   cartella di output `dist`).
-4. In **Settings → Environment Variables** aggiungi gli stessi due valori del
-   file `.env`: `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`.
-5. Avvia il deploy: otterrai un link pubblico da aprire sul telefono o su
-   qualsiasi computer.
+## Come pubblicare su GitHub e Vercel
 
-### Come provare il flusso completo
+### Passo 0 — Supabase (una volta, per il database vero)
+1. Crea un progetto gratuito su **supabase.com**.
+2. **SQL Editor → New query** → incolla il contenuto di `supabase-schema.sql` → **Run**.
+3. **Authentication → Providers → Email**: lascia **attiva** *Confirm email* (verifica via mail).
+4. **Project Settings → API**: copia `Project URL` e la chiave `anon public`.
+5. Nella cartella `LL`: `Copy-Item .env.example .env` e incolla i due valori in `.env`.
 
-Una volta aperta l'app (locale o online):
-1. **Start Your Journey** → registrati con una email e una password (min. 6
-   caratteri). Essendo la conferma email disattivata, entri subito.
-2. Compila l'**onboarding** (nome e taglie).
-3. Dalla dashboard premi **Plan a Trip** e segui i 5 passi fino al pagamento.
-4. Dopo il "pagamento" (simulato) il viaggio compare in **Upcoming Trips** con
-   mappa e conto alla rovescia.
-5. Esci e rientra: ritrovi profilo e viaggi, perché sono salvati (in Test mode
-   nel browser, con Supabase sul database vero).
+### Passo 1 — GitHub
+1. Su github.com crea un **New repository** (senza README/.gitignore, il progetto li ha già).
+2. Copia l'URL del repo.
+3. Dalla cartella `LL`:
+   ```powershell
+   git remote add origin https://github.com/TUO-UTENTE/NOME-REPO.git
+   git branch -M main
+   git push -u origin main
+   ```
+   (al primo push GitHub chiede l'autenticazione nel browser)
 
-> L'app è pensata per smartphone (layout stretto). Sul computer la vedi bene
-> restringendo la finestra, oppure aprendo gli strumenti sviluppatore del
-> browser (**F12**) e attivando la vista mobile.
+### Passo 2 — Vercel
+1. Su **vercel.com** accedi con GitHub → **Add New → Project** → importa il repo.
+2. Vercel riconosce Vite da solo (build `npm run build`, output `dist`).
+3. **Settings → Environment Variables**: aggiungi `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`.
+4. **Deploy** → ottieni un link pubblico.
+5. Torna su Supabase → **Authentication → URL Configuration → Site URL** e inserisci
+   l'URL di Vercel, così i link di verifica email aprono il sito online.
+
+### Aggiornamenti successivi
+`git add ...` → `git commit -m "..."` → `git push`. Vercel ridistribuisce da solo.
+
+> Nota: la verifica email è attiva. Un nuovo utente riceve un link, lo clicca, poi
+> fa login; il profilo compilato in registrazione viene salvato al primo accesso.
+> L'app è pensata per smartphone: su desktop sfrutta più spazio, su mobile si impila.

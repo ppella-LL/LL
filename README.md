@@ -41,8 +41,11 @@ src/
 2. In the dashboard open **SQL Editor → New query**, paste the contents of
    [`supabase-schema.sql`](./supabase-schema.sql) and click **Run**. This creates
    the `profiles` and `trips` tables with row-level security.
-3. Turn **off** email confirmation for easy testing:
-   **Authentication → Providers → Email →** disable *Confirm email* → Save.
+3. Keep **email confirmation ON** (default):
+   **Authentication → Providers → Email →** ensure *Confirm email* is enabled.
+   New users receive a verification link and must click it before logging in.
+   For production, set your deployed URL under **Authentication → URL Configuration →
+   Site URL** so the confirmation link points to your Vercel domain.
 4. Copy your credentials from **Project Settings → API**:
    - `Project URL`
    - `anon` `public` key
@@ -80,12 +83,18 @@ Restart the dev server; the app switches to Supabase automatically.
    - `VITE_SUPABASE_ANON_KEY`
 5. Deploy. `vercel.json` already rewrites all routes to `index.html` so client-side
    routing works on refresh.
+6. After the first deploy, copy your Vercel URL into Supabase
+   **Authentication → URL Configuration → Site URL** so email verification links
+   open your live site.
 
 ## Notes
 
 - The catalog is generated deterministically, so prices and styles are stable
   across reloads.
-- Payment, photo upload, theme and language controls are UI placeholders for now.
+- Payment, photo upload, and language controls are UI placeholders for now.
+- Email verification is enabled: new users confirm via a link, and the profile
+  captured during signup is saved on their first login.
+- Maps use Leaflet with free OpenStreetMap tiles (no API key).
 - Backend selection lives in `src/lib/backend.ts`: it uses Supabase when env vars
   are set, otherwise the localStorage mock in `src/lib/mockBackend.ts`. The mock
   is for local testing only and is never used in production.

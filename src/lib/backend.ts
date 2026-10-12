@@ -52,10 +52,18 @@ export const backend = {
     return toAppUser(data.session?.user ?? null);
   },
 
-  async signUp(email: string, password: string): Promise<void> {
-    if (useMock) return mockBackend.signUp(email, password);
-    const { error } = await supabase.auth.signUp({ email, password });
+  /**
+   * Sign up. Returns needsConfirmation=true when Supabase has email
+   * confirmation enabled and no session was created (user must click the link).
+   */
+  async signUp(email: string, password: string): Promise<{ needsConfirmation: boolean }> {
+    if (useMock) {
+      await mockBackend.signUp(email, password);
+      return { needsConfirmation: false };
+    }
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
+    return { needsConfirmation: !data.session };
   },
 
   async signIn(email: string, password: string): Promise<void> {

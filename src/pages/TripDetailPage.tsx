@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { MapView } from '@/components/MapView';
 import { TripProgress } from '@/components/TripProgress';
+import { TripInsightCarousel } from '@/components/TripInsightCarousel';
 import { StepHeader } from '@/components/ui/StepHeader';
 import type { RentedItem, ShippedItem } from '@/types';
 
@@ -107,7 +108,8 @@ export default function TripDetailPage() {
             </Card>
           </div>
 
-          {/* Wardrobe */}
+          {/* Wardrobe + rotating insights */}
+          <div className="space-y-6">
           <Card>
             <h3 className="font-black text-lg mb-4 flex items-center gap-2 text-content">
               {trip.wardrobeMode === 'rent' ? (
@@ -170,6 +172,9 @@ export default function TripDetailPage() {
               </Button>
             </div>
           </Card>
+
+          <TripInsightCarousel trip={trip} />
+          </div>
         </div>
       </main>
 
