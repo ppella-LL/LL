@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Semantic color tokens as "R G B" triplets (consumed via rgb(var(--x) / a)).
+   *   surface    = page / card backgrounds (light -> dark steps)
+   *   content    = primary text; -soft / -faint = secondary text
+   *   line       = borders / dividers
+   *   ink        = high-contrast block (B / fintech) + its text
+   */
+  :root {
+    --surface: 249 250 251; /* gray-50 */
+    --surface-2: 255 255 255; /* white cards */
+    --surface-3: 243 244 246; /* subtle fills */
+    --content: 17 17 17;
+    --content-soft: 75 85 99;
+    --content-faint: 156 163 175;
+    --line: 229 231 235;
+    --ink: 0 0 0;
+    --ink-content: 255 255 255;
+  }
+
+  .dark {
+    --surface: 10 10 12; /* near-black page */
+    --surface-2: 24 24 28; /* elevated cards */
+    --surface-3: 38 38 44; /* subtle fills */
+    --content: 245 245 247;
+    --content-soft: 161 161 170;
+    --content-faint: 113 113 122;
+    --line: 48 48 55;
+    --ink: 24 24 28; /* in dark, "ink" blocks are elevated, not pure black */
+    --ink-content: 245 245 247;
+  }
+
+  html,
+  body,
+  #root {
+    @apply h-full;
+  }
+
+  body {
+    background-color: rgb(var(--surface));
+    color: rgb(var(--content));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+
+  /* Smooth, subtle cross-fade when switching theme. */
+  body,
+  body * {
+    transition-property: background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+  }
+}
+
+/* Dark-mode tint for OpenStreetMap tiles (no native dark theme). */
+.map-dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  /* Respect the phone's home-indicator safe area for the bottom nav. */
+  .pb-safe {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+  }
+}
+
+@keyframes flyLuggage {
+  0% {
+    transform: translate(-10vw, 110vh) rotate(-15deg) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.15;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(110vw, -10vh) rotate(15deg) scale(1.2);
+    opacity: 0;
+  }
+}
+.animate-fly-1 {
+  animation: flyLuggage 12s ease-in-out infinite;
+}
+.animate-fly-2 {
+  animation: flyLuggage 16s ease-in-out infinite 5s;
+}
+.animate-fly-3 {
+  animation: flyLuggage 20s ease-in-out infinite 9s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.35s ease both;
+}
+
+/* Never leave content invisible if the user disables animations. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+  }
+}
