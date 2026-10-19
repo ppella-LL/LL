@@ -103,6 +103,26 @@
   animation: flyLuggage 20s ease-in-out infinite 9s;
 }
 
+/* Nike-style oversized editorial display headline. */
+.display-hero {
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+.display-tight {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+/* Airbnb-style wide eyebrow label. */
+.eyebrow {
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;

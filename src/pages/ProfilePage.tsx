@@ -118,10 +118,11 @@ export default function ProfilePage() {
             />
           </div>
           <div className="min-w-0">
-            <h1 className="text-2xl lg:text-3xl font-black tracking-tight text-content truncate">
+            <p className="eyebrow text-brand mb-1">Your account</p>
+            <h1 className="display-tight text-3xl lg:text-4xl text-content truncate">
               {displayName}
             </h1>
-            <p className="text-content-soft font-medium text-sm truncate">
+            <p className="text-content-soft font-medium text-sm truncate mt-1">
               {p?.email || user?.email}
             </p>
           </div>

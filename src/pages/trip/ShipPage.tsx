@@ -40,9 +40,10 @@ export default function ShipPage() {
       <StepHeader title="Inventory setup" onBack={() => navigate('/trip/service')} />
 
       <main className="max-w-6xl mx-auto w-full p-6 lg:p-10">
-        <div className="hidden lg:block mb-6">
-          <h1 className="text-3xl font-black tracking-tight text-content">Ship your wardrobe</h1>
-          <p className="text-content-soft font-medium mt-1">
+        <div className="hidden lg:block mb-7">
+          <p className="eyebrow text-brand mb-2">Ship mode</p>
+          <h1 className="display-tight text-4xl text-content">Ship your wardrobe</h1>
+          <p className="text-content-soft font-medium mt-2">
             Catalog each item once — we store, clean, and deliver it on arrival.
           </p>
         </div>

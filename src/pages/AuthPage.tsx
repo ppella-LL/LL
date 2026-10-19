@@ -171,10 +171,11 @@ export default function AuthPage() {
           </span>
         </div>
         <div className="relative z-10 max-w-md">
-          <h2 className="text-5xl font-black tracking-tight leading-none mb-4">
-            Travel light.
+          <p className="eyebrow text-brand mb-4">London · Zero luggage</p>
+          <h2 className="display-hero text-6xl mb-4">
+            Travel
             <br />
-            <span className="text-brand">Zero</span> luggage.
+            light.
           </h2>
           <p className="text-white/80 text-lg font-medium">
             Your personal wardrobe, freshly pressed and waiting at your room.
@@ -240,7 +241,7 @@ export default function AuthPage() {
 
           {mode === 'login' ? (
             <form onSubmit={handleLogin}>
-              <h1 className="text-3xl font-black tracking-tight text-content mb-1">Welcome back</h1>
+              <h1 className="display-tight text-4xl text-content mb-1">Welcome back</h1>
               <p className="text-content-soft font-medium mb-6">Access your trips and wardrobe.</p>
               <Input
                 label="Email"
@@ -334,7 +335,7 @@ function SignupWizard({ step, data, set, busy, onNext, onBack, onSubmit }: Wizar
 
       {step === 0 && (
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-content mb-1">Create account</h1>
+          <h1 className="display-tight text-3xl text-content mb-1">Create account</h1>
           <p className="text-content-soft font-medium mb-6">Start travelling without luggage.</p>
           <Input
             label="Email"
@@ -357,7 +358,7 @@ function SignupWizard({ step, data, set, busy, onNext, onBack, onSubmit }: Wizar
 
       {step === 1 && (
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-content mb-1">About you</h1>
+          <h1 className="display-tight text-3xl text-content mb-1">About you</h1>
           <p className="text-content-soft font-medium mb-6">So we can tailor your experience.</p>
           <div className="grid grid-cols-2 gap-4">
             <Input
@@ -390,7 +391,7 @@ function SignupWizard({ step, data, set, busy, onNext, onBack, onSubmit }: Wizar
 
       {step === 2 && (
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-content mb-1">Fit &amp; style</h1>
+          <h1 className="display-tight text-3xl text-content mb-1">Fit &amp; style</h1>
           <p className="text-content-soft font-medium mb-6">Helps us pick the perfect size.</p>
 
           <label className="block text-[11px] font-black text-content-faint uppercase tracking-wider mb-2">

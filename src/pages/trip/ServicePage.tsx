@@ -38,10 +38,11 @@ export default function ServicePage() {
 
       <main className="max-w-5xl mx-auto w-full p-6 lg:p-10">
         <div className="text-center mb-8 lg:mb-12">
-          <h1 className="text-3xl lg:text-5xl font-black tracking-tight text-content">
+          <p className="eyebrow text-brand mb-3">Step 2 · Your wardrobe</p>
+          <h1 className="display-hero text-4xl lg:text-6xl text-content">
             How will you dress?
           </h1>
-          <p className="text-content-soft font-medium mt-2 lg:text-lg">
+          <p className="text-content-soft font-medium mt-3 lg:text-lg">
             Pick the service that fits this trip. You can mix and match next time.
           </p>
         </div>

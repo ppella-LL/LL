@@ -46,8 +46,9 @@ export default function TripsListPage() {
   return (
     <div className="min-h-screen bg-surface">
       <header className="px-6 lg:px-10 pt-8 pb-2 max-w-6xl mx-auto w-full">
-        <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-content">Your trips</h1>
-        <p className="text-content-soft font-medium mt-1">
+        <p className="eyebrow text-brand mb-2">Your journeys</p>
+        <h1 className="display-hero text-4xl lg:text-5xl text-content">Your trips</h1>
+        <p className="text-content-soft font-medium mt-2">
           {trips.length > 0
             ? `${trips.length} upcoming ${trips.length === 1 ? 'trip' : 'trips'}`
             : 'Your next adventures will show up here'}
@@ -292,13 +293,13 @@ function EmptyState({ onPlan }: { onPlan: () => void }) {
       </div>
 
       <div className="relative z-10 p-7 lg:p-10">
-        <div className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-md text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full border border-white/20 mb-4">
-          <MapPin size={13} /> No trips yet
+        <div className="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md text-white eyebrow px-3 py-1.5 rounded-full border border-white/20 mb-4">
+          <MapPin size={12} /> No trips yet
         </div>
-        <h2 className="text-white text-3xl lg:text-5xl font-black tracking-tight mb-2 leading-none">
-          Your closet is
+        <h2 className="display-hero text-white text-4xl lg:text-6xl mb-3">
+          Your closet
           <br />
-          waiting in London.
+          waits in London.
         </h2>
         <p className="text-white/80 text-sm lg:text-base font-medium mb-6 max-w-md">
           Plan your first trip and we'll have a fresh wardrobe ready at your room. Zero luggage.

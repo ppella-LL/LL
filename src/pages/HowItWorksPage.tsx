@@ -35,11 +35,13 @@ export default function HowItWorksPage() {
 
       <main className="max-w-5xl mx-auto w-full p-6 lg:p-10 animate-fade-in-up">
         <div className="text-center mb-10 lg:mb-14">
-          <span className="inline-flex items-center gap-1.5 bg-brand-soft text-brand text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full mb-4">
+          <span className="inline-flex items-center gap-1.5 bg-brand-soft text-brand eyebrow px-3 py-1.5 rounded-full mb-4">
             <Sparkles size={14} /> Two ways to travel light
           </span>
-          <h1 className="text-3xl lg:text-5xl font-black tracking-tight text-content">
-            Never pack a bag again.
+          <h1 className="display-hero text-4xl lg:text-6xl text-content">
+            Never pack
+            <br />
+            a bag again.
           </h1>
           <p className="text-content-soft font-medium mt-3 lg:text-lg max-w-xl mx-auto">
             Pick what fits your trip. Rent a fresh wardrobe, or let us look after your own.

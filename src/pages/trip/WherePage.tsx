@@ -93,11 +93,10 @@ export default function WherePage() {
 
       {/* ===== Desktop: two columns (map + form). Mobile: stacked. ===== */}
       <main className="max-w-6xl mx-auto w-full p-4 sm:p-6 lg:p-8">
-        <div className="hidden lg:block mb-6">
-          <h1 className="text-3xl font-black tracking-tight text-content">
-            Plan your London stay
-          </h1>
-          <p className="text-content-soft font-medium mt-1">
+        <div className="hidden lg:block mb-7">
+          <p className="eyebrow text-brand mb-2">Step 1 · Destination</p>
+          <h1 className="display-tight text-4xl text-content">Plan your London stay</h1>
+          <p className="text-content-soft font-medium mt-2">
             Pick where you'll be and when — we'll have your wardrobe ready.
           </p>
         </div>

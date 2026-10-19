@@ -38,17 +38,20 @@ export default function LandingPage() {
             Luggage<span className="text-brand">Less</span>
           </span>
         </div>
-        <div className="relative z-10 hidden lg:flex items-center gap-2 text-white/60 text-sm font-medium">
-          <Sparkles size={16} className="text-brand" /> Trusted by frequent travellers
+        <div className="relative z-10 hidden lg:flex items-center gap-2 text-white/60 eyebrow">
+          <Sparkles size={14} className="text-brand" /> Trusted by frequent travellers
         </div>
       </div>
 
       {/* Content panel */}
       <div className="relative flex flex-col justify-center px-6 py-10 lg:p-14 max-w-xl mx-auto w-full">
-        <h1 className="text-5xl lg:text-6xl font-black tracking-tighter leading-[1.03] mb-6">
-          Travel light.
+        <p className="eyebrow text-brand mb-4">London · Zero luggage</p>
+        <h1 className="display-hero text-6xl lg:text-7xl mb-6">
+          Travel
           <br />
-          <span className="text-brand">Zero</span> luggage.
+          light.
+          <br />
+          <span className="text-brand">Zero</span> bags.
         </h1>
         <p className="text-lg text-white/60 font-medium mb-8 leading-relaxed max-w-md">
           Your personal wardrobe waiting freshly pressed at your hotel room. Never check a bag
@@ -57,14 +60,14 @@ export default function LandingPage() {
 
         <Button
           onClick={() => navigate('/auth')}
-          className="w-full sm:w-auto sm:self-start px-10 py-5 text-lg"
+          className="w-full sm:w-auto sm:self-start px-10 py-5 text-lg rounded-full"
         >
           Start your journey <ArrowRight size={20} />
         </Button>
 
         <div className="mt-12 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-          <h3 className="text-xl font-black mb-5 flex items-center gap-2">
-            <Sparkles size={20} className="text-brand" /> How it works
+          <h3 className="eyebrow text-white mb-5 flex items-center gap-2 text-sm">
+            <Sparkles size={16} className="text-brand" /> How it works
           </h3>
           <ul className="space-y-4 text-sm font-medium text-white/70">
             {STEPS.map((step, i) => (
