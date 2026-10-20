@@ -3,7 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   Building,
   Calendar,
+  Check,
   Clock,
+  Lock,
   MapPin,
   Package,
   Pencil,
@@ -14,18 +16,21 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { Img } from '@/components/ui/Img';
 import { MapView } from '@/components/MapView';
 import { TripProgress } from '@/components/TripProgress';
 import { TripInsightCarousel } from '@/components/TripInsightCarousel';
 import { StepHeader } from '@/components/ui/StepHeader';
+import { currentStepIndex } from '@/lib/tripStatus';
 import type { RentedItem, ShippedItem } from '@/types';
 
 export default function TripDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { trips, deleteTrip } = useAuth();
+  const { trips, deleteTrip, updateTrip } = useAuth();
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [buying, setBuying] = useState<string | null>(null);
 
   const trip = trips.find((t) => t.id === id);
 
@@ -48,6 +53,20 @@ export default function TripDetailPage() {
       navigate('/trips', { replace: true });
     } finally {
       setDeleting(false);
+    }
+  };
+
+  // Buying is available only once the trip has ended (wardrobe collected).
+  const tripEnded = currentStepIndex(trip) >= 5;
+  const canBuy = trip.wardrobeMode === 'rent' && rented.length > 0;
+
+  const buyItem = async (item: RentedItem) => {
+    setBuying(item.id);
+    try {
+      const items = rented.map((i) => (i.id === item.id ? { ...i, purchased: true } : i));
+      await updateTrip({ ...trip, items });
+    } finally {
+      setBuying(null);
     }
   };
 
@@ -176,6 +195,70 @@ export default function TripDetailPage() {
           <TripInsightCarousel trip={trip} />
           </div>
         </div>
+
+        {/* Buy your wardrobe — only for rented wardrobes */}
+        {canBuy && (
+          <section className="mt-6">
+            {!tripEnded ? (
+              // Banner explaining it's not buyable yet.
+              <div className="flex items-start gap-4 bg-surface-2 border border-line/70 rounded-3xl p-5 shadow-soft">
+                <span className="w-11 h-11 rounded-xl bg-surface-3 text-content-faint flex items-center justify-center shrink-0">
+                  <Lock size={20} />
+                </span>
+                <div>
+                  <h3 className="font-black text-content">Keep what you love</h3>
+                  <p className="text-content-soft text-sm font-medium mt-1">
+                    After your trip ends, you'll be able to buy any rented item you fell for —
+                    right here. We'll unlock it once the wardrobe is collected.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <Card>
+                <h3 className="font-black text-lg mb-1 flex items-center gap-2 text-content">
+                  <ShoppingBag size={18} className="text-brand" /> Buy your wardrobe
+                </h3>
+                <p className="text-content-soft text-sm font-medium mb-4">
+                  Loved something on this trip? Make it yours.
+                </p>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {rented.map((item) => {
+                    const buyPrice = item.price * 3;
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex items-center gap-3 bg-surface-3/60 p-2.5 rounded-xl border border-line/70"
+                      >
+                        <Img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-12 h-12 rounded-lg object-cover bg-surface-3 shrink-0"
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-bold text-sm truncate text-content">{item.name}</p>
+                          <p className="text-xs text-content-faint">{item.style}</p>
+                        </div>
+                        {item.purchased ? (
+                          <span className="text-xs font-black text-green-600 bg-green-500/10 px-3 py-2 rounded-full border border-green-500/20 flex items-center gap-1 shrink-0">
+                            <Check size={13} /> Owned
+                          </span>
+                        ) : (
+                          <Button
+                            onClick={() => buyItem(item)}
+                            disabled={buying === item.id}
+                            className="px-4 py-2 text-sm rounded-full shrink-0"
+                          >
+                            {buying === item.id ? '…' : `Buy €${buyPrice}`}
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </Card>
+            )}
+          </section>
+        )}
       </main>
 
       {/* Delete confirmation */}

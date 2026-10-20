@@ -9,7 +9,6 @@ import {
   MapPin,
   Pencil,
   PlaneTakeoff,
-  ShoppingBag,
   Trash2,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -23,12 +22,8 @@ import type { RentedItem } from '@/types';
 export default function TripsListPage() {
   const navigate = useNavigate();
   const { trips, deleteTrip } = useAuth();
-  const [purchased, setPurchased] = useState<Record<string, boolean>>({});
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
-
-  const markPurchased = (tripId: string, itemId: string) =>
-    setPurchased((prev) => ({ ...prev, [`${tripId}-${itemId}`]: true }));
 
   const confirmTrip = trips.find((t) => t.id === confirmId) ?? null;
 
@@ -73,6 +68,7 @@ export default function TripsListPage() {
               const lon = Number(trip.lon || -0.1278);
               const rentedItems =
                 trip.wardrobeMode === 'rent' ? (trip.items as RentedItem[]) : [];
+              const ownedCount = rentedItems.filter((i) => i.purchased).length;
 
               // A lone trip spans the full width, so lay it out horizontally
               // (map beside details) instead of a tall, half-empty column.
@@ -185,50 +181,9 @@ export default function TripsListPage() {
                       </Button>
                     </div>
 
-                    {rentedItems.length > 0 && (
-                      <div className="pt-5 border-t border-dashed border-line">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-content-faint mb-4 flex items-center gap-2">
-                          <ShoppingBag size={14} /> Love your rental? Keep it.
-                        </h4>
-                        <div className="space-y-3">
-                          {rentedItems.map((item) => {
-                            const buyPrice = item.price * 3;
-                            const isOwned = purchased[`${trip.id}-${item.id}`] || item.purchased;
-                            return (
-                              <div
-                                key={item.id}
-                                className="flex items-center justify-between bg-surface-3/60 p-3 rounded-xl border border-line/70"
-                              >
-                                <div className="flex items-center gap-3 min-w-0">
-                                  <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    loading="lazy"
-                                    className="w-10 h-10 rounded-lg object-cover bg-surface-3"
-                                  />
-                                  <div className="min-w-0">
-                                    <p className="font-bold text-sm truncate text-content">
-                                      {item.name}
-                                    </p>
-                                    <p className="text-xs text-content-faint">{item.style}</p>
-                                  </div>
-                                </div>
-                                {isOwned ? (
-                                  <span className="text-xs font-black text-green-600 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20 flex items-center gap-1 shrink-0">
-                                    <Check size={12} /> Owned
-                                  </span>
-                                ) : (
-                                  <button
-                                    onClick={() => markPurchased(trip.id, item.id)}
-                                    className="text-xs font-black text-ink-content bg-ink hover:opacity-90 px-3 py-1.5 rounded-full transition-opacity active:scale-95 shrink-0"
-                                  >
-                                    Buy €{buyPrice}
-                                  </button>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
+                    {ownedCount > 0 && (
+                      <div className="pt-4 border-t border-dashed border-line flex items-center gap-2 text-sm font-bold text-green-600">
+                        <Check size={15} /> {ownedCount} item{ownedCount > 1 ? 's' : ''} owned
                       </div>
                     )}
                     </div>
