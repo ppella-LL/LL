@@ -137,6 +137,66 @@
   animation: fadeInUp 0.35s ease both;
 }
 
+/* ===== Futuristic landing effects (neon / glow / motion) ===== */
+
+/* Animated moving orange aurora blobs behind the hero. */
+@keyframes auroraDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6%, -4%) scale(1.15); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.aurora-1 { animation: auroraDrift 14s ease-in-out infinite; }
+.aurora-2 { animation: auroraDrift 18s ease-in-out infinite reverse; }
+
+/* Subtle moving grid overlay. */
+@keyframes gridPan {
+  from { background-position: 0 0; }
+  to { background-position: 48px 48px; }
+}
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(255, 102, 0, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 102, 0, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: gridPan 6s linear infinite;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Neon text glow for the hero headline. */
+.neon-text {
+  text-shadow:
+    0 0 16px rgba(255, 102, 0, 0.45),
+    0 0 48px rgba(255, 102, 0, 0.25);
+}
+
+/* Pulsing glow ring for the CTA. */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.45), 0 8px 30px -6px rgba(255, 102, 0, 0.6); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 102, 0, 0), 0 8px 40px -4px rgba(255, 102, 0, 0.8); }
+}
+.glow-pulse { animation: glowPulse 2.6s ease-in-out infinite; }
+
+/* Staggered entrance. */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in { animation: riseIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-1, .aurora-2, .cyber-grid, .glow-pulse, .rise-in {
+    animation: none !important;
+  }
+}
+
 /* Never leave content invisible if the user disables animations. */
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up {

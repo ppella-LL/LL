@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  Camera,
   Check,
   ChevronRight,
   Globe,
@@ -22,6 +23,8 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { ColorSelect } from '@/components/ColorSelect';
 import { BodyTypePicker } from '@/components/ProfilePickers';
 import { BodyFigure } from '@/components/BodyFigure';
+import { AvatarPicker } from '@/components/AvatarPicker';
+import { Img } from '@/components/ui/Img';
 import type { Gender, Language, Profile, SizeStandard } from '@/types';
 
 type Tab = 'profile' | 'sizes' | 'settings';
@@ -63,6 +66,7 @@ export default function ProfilePage() {
   const [draft, setDraft] = useState<Profile>(profile ?? makeDefault());
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [avatarOpen, setAvatarOpen] = useState(false);
 
   // Sync local draft whenever the loaded profile changes (loads late / updates).
   useEffect(() => {
@@ -82,9 +86,12 @@ export default function ProfilePage() {
     try {
       const displayName =
         `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim() || p.name || 'Traveler';
-      const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
-        displayName,
-      )}&backgroundColor=${(p.favoriteColor || '#ff6600').replace('#', '')}`;
+      // Keep the user's chosen photo; only generate one if none is set.
+      const avatar =
+        p.avatar ||
+        `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+          displayName,
+        )}&backgroundColor=${(p.favoriteColor || '#ff6600').replace('#', '')}`;
       await saveProfile({ ...p, name: displayName, avatar });
       setSaved(true);
     } finally {
@@ -106,16 +113,18 @@ export default function ProfilePage() {
         {/* Header: avatar beside name */}
         <div className="flex items-center gap-5 mb-8">
           <div className="relative shrink-0">
-            <img
+            <Img
               src={p?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'}
               alt="avatar"
               className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl bg-surface-2 border border-line shadow-soft object-cover"
             />
-            <span
-              className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-full border-2 border-surface shadow-soft"
-              style={{ backgroundColor: p?.favoriteColor || '#ff6600' }}
-              title="Favourite colour"
-            />
+            <button
+              onClick={() => setAvatarOpen(true)}
+              className="absolute -bottom-2 -right-2 w-8 h-8 bg-ink text-ink-content rounded-full flex items-center justify-center border-2 border-surface shadow-soft hover:bg-brand transition-colors"
+              aria-label="Change photo"
+            >
+              <Camera size={15} />
+            </button>
           </div>
           <div className="min-w-0">
             <p className="eyebrow text-brand mb-1">Your account</p>
@@ -326,6 +335,15 @@ export default function ProfilePage() {
           </div>
         )}
       </main>
+
+      <AvatarPicker
+        open={avatarOpen}
+        current={p?.avatar}
+        name={displayName}
+        favoriteColor={p?.favoriteColor}
+        onClose={() => setAvatarOpen(false)}
+        onSelect={(url) => update({ avatar: url })}
+      />
     </div>
   );
 }

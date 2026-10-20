@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Calendar, MapPin, PlaneTakeoff } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Logo } from '@/components/ui/Logo';
+import { Img } from '@/components/ui/Img';
 import { LondonCarousel } from '@/components/LondonCarousel';
 
 export default function DashboardPage() {
@@ -56,7 +57,7 @@ export default function DashboardPage() {
           className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-transparent hover:ring-brand transition-all bg-surface-3"
           aria-label="Open profile"
         >
-          <img
+          <Img
             src={profile?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=fallback'}
             alt="avatar"
             className="w-full h-full object-cover"

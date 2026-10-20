@@ -21,69 +21,92 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // A logged-in visitor landing here goes straight to the app.
   useEffect(() => {
     if (user) navigate('/dashboard', { replace: true });
   }, [user, navigate]);
 
   return (
-    <div className="min-h-dvh bg-black text-white lg:grid lg:grid-cols-2">
-      {/* Visual panel */}
-      <div className="relative overflow-hidden min-h-[42vh] lg:min-h-dvh flex flex-col justify-between p-6 lg:p-10">
-        <LondonCarousel />
-        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/45 to-black/85" />
-        <div className="relative z-10 flex items-center gap-2 text-2xl font-black">
+    <div className="relative min-h-dvh bg-black text-white overflow-hidden flex flex-col">
+      {/* Layer 0: dynamic London photos, dimmed and tinted */}
+      <LondonCarousel className="opacity-40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black" />
+
+      {/* Layer 1: animated orange aurora + cyber grid */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="aurora aurora-1 bg-brand/40 w-[55vw] h-[55vw] -top-[15vw] -left-[10vw]" />
+        <div className="aurora aurora-2 bg-brand/30 w-[45vw] h-[45vw] bottom-[-15vw] right-[-10vw]" />
+        <div className="absolute inset-0 cyber-grid" />
+      </div>
+
+      {/* Nav */}
+      <header className="relative z-10 p-6 lg:px-10 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-2xl font-black">
           <Luggage className="text-brand" size={28} />
           <span>
             Luggage<span className="text-brand">Less</span>
           </span>
         </div>
-        <div className="relative z-10 hidden lg:flex items-center gap-2 text-white/60 eyebrow">
-          <Sparkles size={14} className="text-brand" /> Trusted by frequent travellers
-        </div>
-      </div>
+        <button
+          onClick={() => navigate('/auth')}
+          className="text-sm font-bold text-white/70 hover:text-white transition-colors"
+        >
+          Log in
+        </button>
+      </header>
 
-      {/* Content panel */}
-      <div className="relative flex flex-col justify-center px-6 py-10 lg:p-14 max-w-xl mx-auto w-full">
-        <p className="eyebrow text-brand mb-4">London · Zero luggage</p>
-        <h1 className="display-hero text-6xl lg:text-7xl mb-6">
-          Travel
-          <br />
-          light.
+      {/* Hero */}
+      <main className="relative z-10 flex-1 flex flex-col justify-center items-center text-center px-6 py-10 max-w-3xl mx-auto w-full">
+        <p className="eyebrow text-brand mb-5 rise-in" style={{ animationDelay: '0.05s' }}>
+          <Sparkles size={13} className="inline mb-0.5 mr-1" /> London · Zero luggage
+        </p>
+
+        <h1
+          className="display-hero neon-text text-6xl sm:text-7xl lg:text-8xl rise-in"
+          style={{ animationDelay: '0.15s' }}
+        >
+          Travel light.
           <br />
           <span className="text-brand">Zero</span> bags.
         </h1>
-        <p className="text-lg text-white/60 font-medium mb-8 leading-relaxed max-w-md">
-          Your personal wardrobe waiting freshly pressed at your hotel room. Never check a bag
-          again.
+
+        <p
+          className="text-lg lg:text-xl text-white/70 font-medium mt-6 mb-9 leading-relaxed max-w-xl rise-in"
+          style={{ animationDelay: '0.3s' }}
+        >
+          Your personal wardrobe, freshly pressed and waiting in your room.
+          Never check a bag again.
         </p>
 
-        <Button
-          onClick={() => navigate('/auth')}
-          className="w-full sm:w-auto sm:self-start px-10 py-5 text-lg rounded-full"
-        >
-          Start your journey <ArrowRight size={20} />
-        </Button>
-
-        <div className="mt-12 p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-          <h3 className="eyebrow text-white mb-5 flex items-center gap-2 text-sm">
-            <Sparkles size={16} className="text-brand" /> How it works
-          </h3>
-          <ul className="space-y-4 text-sm font-medium text-white/70">
-            {STEPS.map((step, i) => (
-              <li key={step.title} className="flex gap-3 items-start">
-                <span className="bg-brand/20 text-brand rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5 font-black">
-                  {i + 1}
-                </span>
-                <span>
-                  <strong className="text-white block mb-0.5">{step.title}</strong>
-                  {step.body}
-                </span>
-              </li>
-            ))}
-          </ul>
+        <div className="rise-in" style={{ animationDelay: '0.45s' }}>
+          <Button
+            onClick={() => navigate('/auth')}
+            className="px-12 py-5 text-lg rounded-full glow-pulse"
+          >
+            Start your journey <ArrowRight size={20} />
+          </Button>
         </div>
-      </div>
+
+        {/* How it works — glass cards */}
+        <div
+          className="grid sm:grid-cols-3 gap-4 mt-16 w-full rise-in"
+          style={{ animationDelay: '0.6s' }}
+        >
+          {STEPS.map((step, i) => (
+            <div
+              key={step.title}
+              className="text-left p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md hover:border-brand/40 transition-colors"
+            >
+              <span className="inline-flex bg-brand/20 text-brand rounded-full w-7 h-7 items-center justify-center font-black mb-3">
+                {i + 1}
+              </span>
+              <strong className="block text-white text-sm mb-1">{step.title}</strong>
+              <span className="block text-white/60 text-sm font-medium leading-snug">
+                {step.body}
+              </span>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
 }
