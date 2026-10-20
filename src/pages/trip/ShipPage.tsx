@@ -36,7 +36,7 @@ export default function ShipPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface pb-28">
+    <div className="min-h-dvh bg-surface pb-28">
       <StepHeader title="Inventory setup" onBack={() => navigate('/trip/service')} />
 
       <main className="max-w-6xl mx-auto w-full p-6 lg:p-10">

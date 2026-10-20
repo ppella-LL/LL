@@ -31,7 +31,7 @@ export default function TripDetailPage() {
 
   if (!trip) {
     return (
-      <div className="min-h-screen bg-surface">
+      <div className="min-h-dvh bg-surface">
         <StepHeader title="Trip" onBack={() => navigate('/trips')} />
         <div className="p-10 text-center text-content-faint font-bold">Trip not found.</div>
       </div>
@@ -52,7 +52,7 @@ export default function TripDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface pb-10">
+    <div className="min-h-dvh bg-surface pb-10">
       <StepHeader
         title={trip.destination}
         onBack={() => navigate('/trips')}

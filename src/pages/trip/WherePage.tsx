@@ -77,7 +77,7 @@ export default function WherePage() {
   );
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-dvh bg-surface">
       <StepHeader
         title="Where to?"
         onBack={() => navigate('/dashboard')}

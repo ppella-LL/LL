@@ -101,7 +101,7 @@ export default function ProfilePage() {
     `${p?.firstName ?? ''} ${p?.lastName ?? ''}`.trim() || p?.name || 'Traveler';
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="bg-surface">
       <main className="px-6 lg:px-10 pt-8 max-w-3xl mx-auto w-full animate-fade-in-up">
         {/* Header: avatar beside name */}
         <div className="flex items-center gap-5 mb-8">

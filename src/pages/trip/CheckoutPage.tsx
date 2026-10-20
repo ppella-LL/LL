@@ -64,7 +64,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface pb-10">
+    <div className="min-h-dvh bg-surface pb-10">
       <StepHeader title="Checkout" onBack={() => navigate('/trip/extras')} />
 
       <main className="max-w-5xl mx-auto w-full p-6 lg:p-10">

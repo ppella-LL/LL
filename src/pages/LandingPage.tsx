@@ -27,9 +27,9 @@ export default function LandingPage() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen bg-black text-white lg:grid lg:grid-cols-2">
+    <div className="min-h-dvh bg-black text-white lg:grid lg:grid-cols-2">
       {/* Visual panel */}
-      <div className="relative overflow-hidden min-h-[42vh] lg:min-h-screen flex flex-col justify-between p-6 lg:p-10">
+      <div className="relative overflow-hidden min-h-[42vh] lg:min-h-dvh flex flex-col justify-between p-6 lg:p-10">
         <LondonCarousel />
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/45 to-black/85" />
         <div className="relative z-10 flex items-center gap-2 text-2xl font-black">

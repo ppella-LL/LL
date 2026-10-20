@@ -33,7 +33,7 @@ export default function ServicePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-dvh bg-surface">
       <StepHeader title="Choose service" onBack={() => navigate('/trip/where')} />
 
       <main className="max-w-5xl mx-auto w-full p-6 lg:p-10">

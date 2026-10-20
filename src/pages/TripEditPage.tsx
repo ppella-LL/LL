@@ -28,7 +28,7 @@ export default function TripEditPage() {
 
   if (!original || !draft) {
     return (
-      <div className="min-h-screen bg-surface">
+      <div className="min-h-dvh bg-surface">
         <StepHeader title="Edit trip" onBack={() => navigate('/trips')} />
         <div className="p-10 text-center text-content-faint font-bold">Trip not found.</div>
       </div>
@@ -57,7 +57,7 @@ export default function TripEditPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface pb-10">
+    <div className="min-h-dvh bg-surface pb-10">
       <StepHeader title="Edit trip" onBack={() => navigate(`/trips/${draft.id}`)} />
 
       <main className="max-w-3xl mx-auto w-full p-6 lg:p-10 space-y-6 animate-fade-in-up">

@@ -159,7 +159,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface lg:grid lg:grid-cols-2">
+    <div className="min-h-dvh bg-surface lg:grid lg:grid-cols-2">
       {/* Brand panel (desktop) */}
       <div className="hidden lg:flex relative overflow-hidden flex-col justify-between p-10 text-white">
         <LondonCarousel />
@@ -187,7 +187,7 @@ export default function AuthPage() {
       </div>
 
       {/* Form panel */}
-      <div className="flex flex-col justify-center p-6 lg:p-12 min-h-screen lg:min-h-0">
+      <div className="flex flex-col justify-center p-6 lg:p-12 min-h-dvh lg:min-h-0">
         <div className="w-full max-w-md mx-auto">
           <Logo size={30} className="text-2xl justify-center lg:hidden mb-8" />
 

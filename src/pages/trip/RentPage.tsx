@@ -31,7 +31,7 @@ export default function RentPage() {
   const cartIds = useMemo(() => new Set(cart.map((i) => i.id)), [cart]);
 
   return (
-    <div className="min-h-screen bg-surface pb-28">
+    <div className="min-h-dvh bg-surface pb-28">
       <StepHeader
         title="Catalog"
         onBack={() => navigate('/trip/service')}

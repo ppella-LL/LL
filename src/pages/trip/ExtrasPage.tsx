@@ -29,7 +29,7 @@ export default function ExtrasPage() {
   });
 
   return (
-    <div className="min-h-screen bg-surface pb-28">
+    <div className="min-h-dvh bg-surface pb-28">
       <StepHeader
         title="Travel extras"
         onBack={() => navigate(-1)}

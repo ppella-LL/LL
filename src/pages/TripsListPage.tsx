@@ -44,7 +44,7 @@ export default function TripsListPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="bg-surface">
       <header className="px-6 lg:px-10 pt-8 pb-2 max-w-6xl mx-auto w-full">
         <p className="eyebrow text-brand mb-2">Your journeys</p>
         <h1 className="display-hero text-4xl lg:text-5xl text-content">Your trips</h1>

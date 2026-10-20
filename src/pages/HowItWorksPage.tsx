@@ -30,7 +30,7 @@ export default function HowItWorksPage() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-dvh bg-surface">
       <StepHeader title="How it works" onBack={() => navigate(-1)} />
 
       <main className="max-w-5xl mx-auto w-full p-6 lg:p-10 animate-fade-in-up">

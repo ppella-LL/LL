@@ -48,7 +48,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="bg-surface">
       <header className="px-6 lg:px-10 pt-6 pb-2 flex items-center justify-between max-w-6xl mx-auto w-full">
         <Logo size={24} className="text-xl text-content" />
         <button
