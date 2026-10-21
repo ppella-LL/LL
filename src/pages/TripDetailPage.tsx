@@ -11,12 +11,14 @@ import {
   Pencil,
   ShoppingBag,
   Sparkles,
+  Star,
   Trash2,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Img } from '@/components/ui/Img';
+import { StarRating } from '@/components/ui/StarRating';
 import { MapView } from '@/components/MapView';
 import { TripProgress } from '@/components/TripProgress';
 import { TripInsightCarousel } from '@/components/TripInsightCarousel';
@@ -69,6 +71,10 @@ export default function TripDetailPage() {
       setBuying(null);
     }
   };
+
+  const rateWardrobe = (stars: number) => updateTrip({ ...trip, wardrobeRating: stars });
+  const rateItem = (itemId: string, stars: number) =>
+    updateTrip({ ...trip, itemRatings: { ...(trip.itemRatings ?? {}), [itemId]: stars } });
 
   return (
     <div className="min-h-dvh bg-surface pb-10">
@@ -257,6 +263,59 @@ export default function TripDetailPage() {
                 </div>
               </Card>
             )}
+          </section>
+        )}
+
+        {/* Rate your trip — available once the wardrobe is collected */}
+        {tripEnded && (
+          <section className="mt-6">
+            <Card>
+              <h3 className="font-black text-lg mb-1 flex items-center gap-2 text-content">
+                <Star size={18} className="text-brand" /> Rate your wardrobe
+              </h3>
+              <p className="text-content-soft text-sm font-medium mb-4">
+                How was it overall? Your feedback helps other travellers.
+              </p>
+              <div className="flex items-center gap-3 mb-6">
+                <StarRating value={trip.wardrobeRating ?? 0} onChange={rateWardrobe} />
+                {trip.wardrobeRating ? (
+                  <span className="text-sm font-bold text-content-soft">Thanks!</span>
+                ) : null}
+              </div>
+
+              <h4 className="eyebrow text-content-faint mb-3">Rate individual items</h4>
+              <div className="space-y-3">
+                {[...rented, ...shipped].map((item) => {
+                  const label =
+                    'name' in item
+                      ? (item as RentedItem).name
+                      : `${(item as ShippedItem).color} ${(item as ShippedItem).material}`;
+                  const image = 'image' in item ? (item as RentedItem).image : undefined;
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-3 bg-surface-3/60 p-2.5 rounded-xl border border-line/70"
+                    >
+                      {image && (
+                        <Img
+                          src={image}
+                          alt={label}
+                          className="w-11 h-11 rounded-lg object-cover bg-surface-3 shrink-0"
+                        />
+                      )}
+                      <span className="flex-1 min-w-0 font-bold text-sm text-content truncate capitalize">
+                        {label}
+                      </span>
+                      <StarRating
+                        value={trip.itemRatings?.[item.id] ?? 0}
+                        onChange={(n) => rateItem(item.id, n)}
+                        size={18}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
           </section>
         )}
       </main>

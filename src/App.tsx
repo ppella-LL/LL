@@ -14,6 +14,8 @@ const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const TripsListPage = lazy(() => import('@/pages/TripsListPage'));
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'));
 const HowItWorksPage = lazy(() => import('@/pages/HowItWorksPage'));
+const HowWeCleanPage = lazy(() => import('@/pages/HowWeCleanPage'));
+const PolicyPage = lazy(() => import('@/pages/PolicyPage'));
 const TripDetailPage = lazy(() => import('@/pages/TripDetailPage'));
 const TripEditPage = lazy(() => import('@/pages/TripEditPage'));
 const WherePage = lazy(() => import('@/pages/trip/WherePage'));
@@ -22,6 +24,7 @@ const RentPage = lazy(() => import('@/pages/trip/RentPage'));
 const ShipPage = lazy(() => import('@/pages/trip/ShipPage'));
 const ExtrasPage = lazy(() => import('@/pages/trip/ExtrasPage'));
 const CheckoutPage = lazy(() => import('@/pages/trip/CheckoutPage'));
+const TripConfirmedPage = lazy(() => import('@/pages/trip/TripConfirmedPage'));
 
 export default function App() {
   const { loading } = useAuth();
@@ -36,6 +39,8 @@ export default function App() {
         <Route path="/auth" element={<AuthPage />} />
         {/* Public: reachable from the landing/login too. */}
         <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/how-we-clean" element={<HowWeCleanPage />} />
+        <Route path="/policy" element={<PolicyPage />} />
 
         <Route element={<ProtectedRoute />}>
           {/* Primary tabs share the bottom navigation. */}
@@ -47,6 +52,7 @@ export default function App() {
 
           <Route path="/trips/:id" element={<TripDetailPage />} />
           <Route path="/trips/:id/edit" element={<TripEditPage />} />
+          <Route path="/trip/confirmed/:id" element={<TripConfirmedPage />} />
 
           {/* Trip planning flow shares a single draft via TripDraftProvider. */}
           <Route

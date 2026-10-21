@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Check, HelpCircle, Plus, RefreshCw, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Check, HelpCircle, Plus, RefreshCw, ShieldCheck, Star, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Img } from '@/components/ui/Img';
 
 export interface TagItem {
   id: string;
@@ -15,17 +17,22 @@ export interface TagItem {
   brand?: string;
   /** Present for rentable garments; omitted for one-time-buy essentials. */
   cycles?: number;
+  rating?: number;
+  ratingCount?: number;
 }
 
 interface ItemTagProps {
   item: TagItem | null;
   inCart: boolean;
+  /** 'match' | 'off' | undefined — show a "your size" badge for garments. */
+  sizeMatch?: 'match' | 'off';
   onClose: () => void;
   onToggle: (item: TagItem) => void;
 }
 
-/** Pop-up "tag": image + attributes (+ wear cycles for garments), add/remove. */
-export function ItemTag({ item, inCart, onClose, onToggle }: ItemTagProps) {
+/** Pop-up "tag": image + rating + attributes (+ wear cycles), add/remove. */
+export function ItemTag({ item, inCart, sizeMatch, onClose, onToggle }: ItemTagProps) {
+  const navigate = useNavigate();
   const [explain, setExplain] = useState(false);
   if (!item) return null;
 
@@ -45,8 +52,8 @@ export function ItemTag({ item, inCart, onClose, onToggle }: ItemTagProps) {
         className="bg-surface-2 rounded-3xl w-full max-w-sm shadow-soft-lg animate-fade-in-up overflow-hidden max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative aspect-[4/3] bg-surface-3">
-          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+        <div className="relative aspect-[4/3] bg-surface-3 shrink-0">
+          <Img src={item.image} alt={item.name} className="w-full h-full object-cover" />
           <button
             onClick={onClose}
             aria-label="Close"
@@ -59,16 +66,50 @@ export function ItemTag({ item, inCart, onClose, onToggle }: ItemTagProps) {
               {item.style}
             </div>
           )}
+          {sizeMatch && (
+            <div
+              className={`absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-black shadow-soft ${
+                sizeMatch === 'match' ? 'bg-brand text-white' : 'bg-surface-2/90 text-content-soft'
+              }`}
+            >
+              {sizeMatch === 'match' ? <Check size={12} /> : null}
+              {sizeMatch === 'match' ? 'Your size' : 'Not your size'}
+            </div>
+          )}
         </div>
 
         <div className="p-5 overflow-y-auto">
-          <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-start justify-between gap-3 mb-1">
             <h3 className="font-black text-xl text-content leading-tight">{item.name}</h3>
             <span className="text-brand font-black text-xl shrink-0">€{item.price}</span>
           </div>
-          {item.desc && (
-            <p className="text-content-soft text-sm font-medium mb-4">{item.desc}</p>
+
+          {/* Rating */}
+          {item.rating !== undefined && (
+            <div className="flex items-center gap-1.5 mb-3">
+              <div className="flex">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    size={14}
+                    className={
+                      i < Math.round(item.rating!)
+                        ? 'fill-brand text-brand'
+                        : 'text-content-faint'
+                    }
+                  />
+                ))}
+              </div>
+              <span className="text-sm font-bold text-content">{item.rating.toFixed(1)}</span>
+              {item.ratingCount !== undefined && (
+                <span className="text-xs text-content-faint font-medium">
+                  ({item.ratingCount})
+                </span>
+              )}
+            </div>
           )}
+
+          {item.desc && <p className="text-content-soft text-sm font-medium mb-4">{item.desc}</p>}
 
           {rows.length > 0 && (
             <dl className="divide-y divide-line/70 rounded-2xl border border-line/70 overflow-hidden mb-4">
@@ -83,7 +124,7 @@ export function ItemTag({ item, inCart, onClose, onToggle }: ItemTagProps) {
             </dl>
           )}
 
-          {/* Wear cycles — only for garments. */}
+          {/* Wear cycles + How we clean — only for garments. */}
           {item.cycles !== undefined && (
             <div className="bg-surface-3/60 border border-line/70 rounded-2xl p-4 mb-5">
               <div className="flex items-center justify-between">
@@ -116,6 +157,12 @@ export function ItemTag({ item, inCart, onClose, onToggle }: ItemTagProps) {
                   professionally sanitised after each use.
                 </p>
               )}
+              <button
+                onClick={() => navigate('/how-we-clean')}
+                className="w-full mt-3 pt-3 border-t border-line/70 flex items-center justify-center gap-1.5 text-sm font-bold text-brand hover:underline"
+              >
+                <ShieldCheck size={15} /> How we clean
+              </button>
             </div>
           )}
 

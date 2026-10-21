@@ -1,20 +1,26 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, CheckCircle, Plus, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Check, CheckCircle, Plus, ShoppingBag } from 'lucide-react';
 import { useTripDraft } from '@/context/TripDraftContext';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { StepHeader } from '@/components/ui/StepHeader';
 import { CartDrawer } from '@/components/CartDrawer';
 import { ItemTag } from '@/components/ItemTag';
 import { CATALOG_ITEMS, CATEGORIES, STYLES } from '@/data/catalog';
+import { OUTFITS, outfitItems, outfitTotal } from '@/data/outfits';
+import { matchesUserSize } from '@/lib/sizing';
+import { Img } from '@/components/ui/Img';
 import type { CatalogItem } from '@/types';
 
 export default function RentPage() {
   const navigate = useNavigate();
   const { cart, toggleCartItem } = useTripDraft();
+  const { profile } = useAuth();
 
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].id);
   const [activeStyle, setActiveStyle] = useState<string>('All');
+  const [onlyMySize, setOnlyMySize] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [tagItem, setTagItem] = useState<CatalogItem | null>(null);
 
@@ -22,13 +28,23 @@ export default function RentPage() {
     () =>
       CATALOG_ITEMS.filter(
         (i) =>
-          i.category === activeCategory && (activeStyle === 'All' || i.style === activeStyle),
+          i.category === activeCategory &&
+          (activeStyle === 'All' || i.style === activeStyle) &&
+          (!onlyMySize || matchesUserSize(i, profile) === true),
       ),
-    [activeCategory, activeStyle],
+    [activeCategory, activeStyle, onlyMySize, profile],
   );
 
   const cartTotal = useMemo(() => cart.reduce((sum, i) => sum + i.price, 0), [cart]);
   const cartIds = useMemo(() => new Set(cart.map((i) => i.id)), [cart]);
+
+  // Add every item of an outfit that isn't already in the cart.
+  const addOutfit = (ids: string[]) => {
+    const inCart = new Set(cart.map((i) => i.id));
+    outfitItems({ id: '', name: '', tagline: '', itemIds: ids }).forEach((it) => {
+      if (!inCart.has(it.id)) toggleCartItem(it);
+    });
+  };
 
   return (
     <div className="min-h-dvh bg-surface pb-28">
@@ -76,13 +92,80 @@ export default function RentPage() {
               </button>
             ))}
           </div>
+          {/* Only my size filter */}
+          <button
+            onClick={() => setOnlyMySize((v) => !v)}
+            className={`self-start inline-flex items-center gap-2 px-3 py-1.5 rounded-full font-bold text-xs transition-colors border ${
+              onlyMySize
+                ? 'bg-brand text-white border-transparent'
+                : 'bg-surface-2 text-content-soft border-line hover:border-content-faint/50'
+            }`}
+          >
+            <span
+              className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                onlyMySize ? 'bg-white text-brand' : 'border border-content-faint'
+              }`}
+            >
+              {onlyMySize && <Check size={11} />}
+            </span>
+            Only my size
+          </button>
         </div>
       </StepHeader>
 
       <main className="p-4 lg:p-8 max-w-6xl mx-auto w-full">
+        {/* Recommended outfits */}
+        {!onlyMySize && (
+          <section className="mb-8">
+            <div className="flex items-baseline justify-between mb-3">
+              <h2 className="display-tight text-xl text-content">Recommended outfits</h2>
+              <span className="eyebrow text-content-faint">Tap to add the set</span>
+            </div>
+            <div className="flex gap-4 overflow-x-auto no-scrollbar pb-1">
+              {OUTFITS.map((outfit) => {
+                const items = outfitItems(outfit);
+                if (items.length === 0) return null;
+                return (
+                  <div
+                    key={outfit.id}
+                    className="shrink-0 w-64 bg-surface-2 border border-line/70 rounded-3xl p-3 shadow-soft"
+                  >
+                    <div className="grid grid-cols-2 gap-1.5 mb-3">
+                      {items.slice(0, 4).map((it) => (
+                        <div key={it.id} className="aspect-square rounded-xl overflow-hidden bg-surface-3">
+                          <Img src={it.image} alt={it.name} className="w-full h-full object-cover" />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="px-1">
+                      <p className="font-black text-content leading-tight">{outfit.name}</p>
+                      <p className="text-xs text-content-soft font-medium mb-3">{outfit.tagline}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-brand font-black">€{outfitTotal(outfit)}</span>
+                        <Button
+                          onClick={() => addOutfit(outfit.itemIds)}
+                          className="px-4 py-2 text-sm rounded-full"
+                        >
+                          Add outfit
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {onlyMySize && filteredItems.length === 0 && (
+          <div className="text-center py-16 text-content-faint font-bold">
+            No items in your size here. Try another category or turn off the filter.
+          </div>
+        )}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 lg:gap-6">
           {filteredItems.map((item) => {
             const inCart = cartIds.has(item.id);
+            const sizeOk = matchesUserSize(item, profile);
             return (
               <button
                 key={item.id}
@@ -112,8 +195,15 @@ export default function RentPage() {
                   >
                     {inCart ? <CheckCircle size={18} /> : <Plus size={18} />}
                   </span>
-                  <div className="absolute top-2.5 left-2.5 bg-surface-2/90 backdrop-blur-sm px-2 py-1 rounded-md text-[9px] font-black uppercase text-content-soft shadow-soft">
-                    {item.style}
+                  <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 items-start">
+                    <span className="bg-surface-2/90 backdrop-blur-sm px-2 py-1 rounded-md text-[9px] font-black uppercase text-content-soft shadow-soft">
+                      {item.style}
+                    </span>
+                    {sizeOk === true && (
+                      <span className="bg-brand text-white px-2 py-1 rounded-md text-[9px] font-black uppercase shadow-soft inline-flex items-center gap-1">
+                        <Check size={10} /> Your size
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="px-1 pb-1">
@@ -176,6 +266,15 @@ export default function RentPage() {
       <ItemTag
         item={tagItem}
         inCart={tagItem ? cartIds.has(tagItem.id) : false}
+        sizeMatch={
+          tagItem
+            ? matchesUserSize(tagItem, profile) === true
+              ? 'match'
+              : matchesUserSize(tagItem, profile) === false
+                ? 'off'
+                : undefined
+            : undefined
+        }
         onClose={() => setTagItem(null)}
         onToggle={() => tagItem && toggleCartItem(tagItem)}
       />

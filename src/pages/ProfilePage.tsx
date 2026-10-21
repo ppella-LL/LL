@@ -11,6 +11,8 @@ import {
   Moon,
   Palette,
   Ruler,
+  Shield,
+  Sparkles,
   Sun,
   User as UserIcon,
 } from 'lucide-react';
@@ -302,21 +304,45 @@ export default function ProfilePage() {
               </div>
             </Card>
 
-            <button
-              onClick={() => navigate('/how-it-works')}
-              className="w-full flex items-center gap-4 bg-surface-2 border border-line/70 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg transition-all active:scale-[0.99] text-left"
-            >
-              <span className="w-11 h-11 rounded-xl bg-brand-soft text-brand flex items-center justify-center shrink-0">
-                <Info size={20} />
-              </span>
-              <span className="flex-1">
-                <span className="block font-black text-content">How it works</span>
-                <span className="block text-sm text-content-soft font-medium">
-                  Rent, or let us manage your clothes
-                </span>
-              </span>
-              <ChevronRight size={20} className="text-content-faint" />
-            </button>
+            <div className="space-y-3">
+              {[
+                {
+                  to: '/how-it-works',
+                  icon: Info,
+                  title: 'How it works',
+                  sub: 'Rent, or let us manage your clothes',
+                },
+                {
+                  to: '/how-we-clean',
+                  icon: Sparkles,
+                  title: 'How we clean',
+                  sub: 'Our sanitising process & certifications',
+                },
+                {
+                  to: '/policy',
+                  icon: Shield,
+                  title: 'Lost or damaged',
+                  sub: 'Insurance & claims — you are covered',
+                },
+              ].map((link) => (
+                <button
+                  key={link.to}
+                  onClick={() => navigate(link.to)}
+                  className="w-full flex items-center gap-4 bg-surface-2 border border-line/70 rounded-2xl p-5 shadow-soft hover:shadow-soft-lg transition-all active:scale-[0.99] text-left"
+                >
+                  <span className="w-11 h-11 rounded-xl bg-brand-soft text-brand flex items-center justify-center shrink-0">
+                    <link.icon size={20} />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block font-black text-content">{link.title}</span>
+                    <span className="block text-sm text-content-soft font-medium truncate">
+                      {link.sub}
+                    </span>
+                  </span>
+                  <ChevronRight size={20} className="text-content-faint shrink-0" />
+                </button>
+              ))}
+            </div>
 
             <Card>
               <h3 className="font-black text-lg mb-4 text-content">Account</h3>

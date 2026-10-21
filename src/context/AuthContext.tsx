@@ -25,7 +25,7 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   saveProfile: (profile: Profile) => Promise<void>;
-  addTrip: (trip: Omit<Trip, 'id'>) => Promise<void>;
+  addTrip: (trip: Omit<Trip, 'id'>) => Promise<Trip>;
   updateTrip: (trip: Trip) => Promise<void>;
   deleteTrip: (tripId: string) => Promise<void>;
 }
@@ -144,6 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user) throw new Error('Not authenticated');
       const created = await backend.createTrip(user.id, trip);
       setTrips((prev) => sortByCheckIn([...prev, created]));
+      return created;
     },
     [user],
   );

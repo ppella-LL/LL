@@ -45,6 +45,10 @@ export interface CatalogItem {
   brand: string;
   /** How many travellers wore this item before (simulated). */
   cycles: number;
+  /** Average star rating (mock), 0–5 with one decimal. */
+  rating: number;
+  /** Number of ratings behind the average (mock). */
+  ratingCount: number;
 }
 
 export type EssentialCategory = 'wellness' | 'hygiene' | 'electronics' | 'wear';
@@ -86,6 +90,9 @@ export interface Trip {
   essentials: EssentialItem[];
   status: string;
   createdAt: string;
+  /** Post-trip review: overall wardrobe rating (1–5) + per-item ratings. */
+  wardrobeRating?: number;
+  itemRatings?: Record<string, number>;
 }
 
 /** Draft trip being built across the planning steps. */

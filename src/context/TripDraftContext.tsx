@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { STORAGE_FEE } from '@/data/catalog';
 import type {
   CatalogItem,
   EssentialItem,
@@ -39,6 +40,8 @@ interface TripDraftContextValue {
   toggleEssential: (item: EssentialItem) => void;
   /** Prefill the wardrobe from a past trip (reuse feature). */
   loadWardrobeFromTrip: (trip: Trip) => void;
+  /** Running total of the trip so far (wardrobe + extras + storage). */
+  tripTotal: number;
   reset: () => void;
 }
 
@@ -99,6 +102,17 @@ export function TripDraftProvider({ children }: { children: ReactNode }) {
     setEssentialsCart([]);
   }, []);
 
+  const tripTotal = useMemo(() => {
+    const wardrobe =
+      wardrobeMode === 'rent'
+        ? cart.reduce((s, i) => s + i.price, 0)
+        : wardrobeMode === 'ship'
+          ? STORAGE_FEE
+          : 0;
+    const extras = essentialsCart.reduce((s, i) => s + i.price, 0);
+    return wardrobe + extras;
+  }, [wardrobeMode, cart, essentialsCart]);
+
   const value = useMemo<TripDraftContextValue>(
     () => ({
       draft,
@@ -112,6 +126,7 @@ export function TripDraftProvider({ children }: { children: ReactNode }) {
       essentialsCart,
       toggleEssential,
       loadWardrobeFromTrip,
+      tripTotal,
       reset,
     }),
     [
@@ -125,6 +140,7 @@ export function TripDraftProvider({ children }: { children: ReactNode }) {
       essentialsCart,
       toggleEssential,
       loadWardrobeFromTrip,
+      tripTotal,
       reset,
     ],
   );

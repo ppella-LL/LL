@@ -53,9 +53,9 @@ export default function CheckoutPage() {
     };
 
     try {
-      await addTrip(newTrip);
+      const created = await addTrip(newTrip);
       reset();
-      navigate('/trips', { replace: true });
+      navigate(`/trip/confirmed/${created.id}`, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Payment could not be completed.');
     } finally {

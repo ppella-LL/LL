@@ -4,6 +4,7 @@ import { ArrowRight, History, Package, ShoppingBag, X } from 'lucide-react';
 import { useTripDraft } from '@/context/TripDraftContext';
 import { useAuth } from '@/context/AuthContext';
 import { StepHeader } from '@/components/ui/StepHeader';
+import { TripCostPill } from '@/components/TripCostPill';
 
 export default function ServicePage() {
   const navigate = useNavigate();
@@ -34,7 +35,11 @@ export default function ServicePage() {
 
   return (
     <div className="min-h-dvh bg-surface">
-      <StepHeader title="Choose service" onBack={() => navigate('/trip/where')} />
+      <StepHeader
+        title="Choose service"
+        onBack={() => navigate('/trip/where')}
+        right={<TripCostPill />}
+      />
 
       <main className="max-w-5xl mx-auto w-full p-6 lg:p-10">
         <div className="text-center mb-8 lg:mb-12">

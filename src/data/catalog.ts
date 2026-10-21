@@ -69,6 +69,8 @@ export const CATALOG_ITEMS: CatalogItem[] = CATEGORIES.flatMap((cat, catIndex) =
     const brand = pick(BRANDS, rand());
     const size = pick(SIZES_BY_CATEGORY[cat.id] ?? ['M'], rand());
     const cycles = Math.floor(rand() * 41); // 0–40 travellers before
+    const rating = Math.round((4 + rand()) * 10) / 10; // 4.0–5.0
+    const ratingCount = 8 + Math.floor(rand() * 180); // 8–187 reviews
     return {
       id: `${cat.id}-${i}`,
       category: cat.id,
@@ -82,6 +84,8 @@ export const CATALOG_ITEMS: CatalogItem[] = CATEGORIES.flatMap((cat, catIndex) =
       material,
       brand,
       cycles,
+      rating,
+      ratingCount,
     };
   });
 });

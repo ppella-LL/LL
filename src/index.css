@@ -15,8 +15,8 @@
     --surface-2: 255 255 255; /* white cards */
     --surface-3: 243 244 246; /* subtle fills */
     --content: 17 17 17;
-    --content-soft: 75 85 99;
-    --content-faint: 156 163 175;
+    --content-soft: 64 72 86; /* darker for AA contrast on white */
+    --content-faint: 110 118 132; /* darker: meets contrast for small text */
     --line: 229 231 235;
     --ink: 0 0 0;
     --ink-content: 255 255 255;
@@ -27,8 +27,8 @@
     --surface-2: 24 24 28; /* elevated cards */
     --surface-3: 38 38 44; /* subtle fills */
     --content: 245 245 247;
-    --content-soft: 161 161 170;
-    --content-faint: 113 113 122;
+    --content-soft: 176 176 186; /* lighter for AA contrast on dark */
+    --content-faint: 140 140 150;
     --line: 48 48 55;
     --ink: 24 24 28; /* in dark, "ink" blocks are elevated, not pure black */
     --ink-content: 245 245 247;
@@ -47,6 +47,13 @@
     -moz-osx-font-smoothing: grayscale;
     font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
       Helvetica, Arial, sans-serif;
+  }
+
+  /* Visible keyboard focus for accessibility (mouse clicks stay clean). */
+  :focus-visible {
+    outline: 2px solid rgb(var(--content) / 0.6);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
   /* Smooth, subtle cross-fade when switching theme. */

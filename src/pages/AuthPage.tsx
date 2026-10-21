@@ -336,7 +336,27 @@ function SignupWizard({ step, data, set, busy, onNext, onBack, onSubmit }: Wizar
       {step === 0 && (
         <div>
           <h1 className="display-tight text-3xl text-content mb-1">Create account</h1>
-          <p className="text-content-soft font-medium mb-6">Start travelling without luggage.</p>
+          <p className="text-content-soft font-medium mb-5">Start travelling without luggage.</p>
+
+          {/* Aha moment — concrete value */}
+          <div className="grid grid-cols-3 gap-2 mb-6">
+            {[
+              { big: '2h', small: 'saved per trip' },
+              { big: '€0', small: 'checked bags' },
+              { big: '0', small: 'laundry loads' },
+            ].map((s) => (
+              <div
+                key={s.small}
+                className="bg-brand-soft border border-brand/15 rounded-2xl p-3 text-center"
+              >
+                <p className="display-tight text-2xl text-brand">{s.big}</p>
+                <p className="text-[10px] font-bold text-content-soft leading-tight mt-1">
+                  {s.small}
+                </p>
+              </div>
+            ))}
+          </div>
+
           <Input
             label="Email"
             type="email"
